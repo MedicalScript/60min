@@ -1,20 +1,16 @@
 {
-  "name": "Mi Devocional",
-  "short_name": "Devocional",
+  "name": "60 min con Dios",
+  "short_name": "60 Min",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#121212",
-  "theme_color": "#1db954",
+  "background_color": "#FDFBF7",
+  "theme_color": "#B4884B",
   "icons": [
     {
-      "src": "https://via.placeholder.com/192x192.png?text=D",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://via.placeholder.com/512x512.png?text=D",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
