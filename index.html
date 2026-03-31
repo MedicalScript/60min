@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunión - Preparación</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --bg-color: #FAFAF9;
+            --surface-color: #FEF3C7;
+            --accent-color: #D97706;
+            --text-main: #292524;
+            --text-muted: #78716C;
+            --timer-bg: #FDE68A;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Pantalla de Bienvenida */
+        #welcome-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.08);
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid var(--surface-color);
+        }
+
+        .welcome-card h1 { font-size: 32px; margin-bottom: 20px; color: var(--accent-color); }
+        .prep-list { text-align: left; margin: 25px 0; padding: 0; list-style: none; }
+        .prep-list li { margin-bottom: 15px; display: flex; align-items: center; font-size: 17px; color: var(--text-main); }
+        .prep-list span { font-size: 24px; margin-right: 15px; }
+
+        .spotify-setup { margin-top: 25px; text-align: left; }
+        .spotify-setup label { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+        .spotify-setup input {
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #E7E5E4;
+            background: #FAFAF9; color: var(--text-main); margin-top: 8px; font-size: 14px;
+        }
+
+        /* Contenedor Principal (Oculto al inicio) */
+        #main-app { display: none; width: 100%; max-width: 500px; padding: 20px; flex-direction: column; align-items: center; }
+
+        header { width: 100%; padding: 20px; display: flex; justify-content: flex-end; }
+        .icon-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; transition: 0.3s; }
+        
+        .container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        h1 { font-size: 28px; margin: 0 0 10px 0; }
+        .quote { font-size: 15px; color: var(--accent-color); font-style: italic; margin-bottom: 15px; font-weight: 500; }
+        .description { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin-bottom: 30px; }
+
+        /* Temporizador Circular */
+        .timer-wrapper { position: relative; width: 220px; height: 220px; margin-bottom: 30px; }
+        .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .timer-bg { fill: none; stroke: var(--timer-bg); stroke-width: 6; }
+        .timer-progress { fill: none; stroke: var(--accent-color); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 50px; font-weight: 300; }
+
+        .controls { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        button.btn {
+            background-color: var(--surface-color); color: var(--accent-color); border: 1px solid var(--timer-bg);
+            padding: 16px; font-size: 17px; border-radius: 14px; cursor: pointer; font-weight: 600; width: 100%;
+        }
+        button.btn.primary { background-color: var(--accent-color); color: white; border: none; }
+
+        #spotify-container { width: 100%; margin-top: 20px; display: none; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div class="welcome-card">
+            <h1>Bienvenido/a</h1>
+            <p style="color: var(--text-muted);">Antes de entrar en Su presencia, asegúrate de tener todo listo para este tiempo sagrado.</p>
+            
+            <ul class="prep-list">
+                <li><span>📖</span> Una Biblia física o digital</li>
+                <li><span>📒</span> Libreta o diario devocional</li>
+                <li><span>✏️</span> Algo para anotar lo que Dios te hable</li>
+            </ul>
+
+            <div class="spotify-setup">
+                <label>Pega el link "Compartir" de tu Playlist:</label>
+                <input type="text" id="initial-spotify" placeholder="https://open.spotify.com/playlist/...">
+            </div>
+
+            <button class="btn primary" style="margin-top: 30px;" onclick="startApp()">Empezar mi hora</button>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <header>
+            <button class="icon-btn" onclick="toggleWelcome()" title="Instrucciones">📔</button>
+        </header>
+
+        <div class="container">
+            <h1 id="step-name">Comunión</h1>
+            <div class="quote" id="step-quote">Santiago 4:8</div>
+            <div class="description" id="step-desc">Silencia el ruido del mundo.</div>
+
+            <div class="timer-wrapper">
+                <svg class="timer-svg" viewBox="0 0 200 200">
+                    <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
+                    <circle class="timer-progress" id="progress-circle" cx="100" cy="100" r="90" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                </svg>
+                <div class="timer-text" id="time-display">00:00</div>
+            </div>
+
+            <div class="controls">
+                <button class="btn primary" id="btn-primary" onclick="toggleTimer()">Iniciar</button>
+                <button class="btn" id="btn-next" onclick="nextStep()" style="display: none;">Siguiente Paso ➔</button>
+            </div>
+
+            <div id="spotify-container">
+                <iframe id="spotify-frame" style="border-radius:12px" src="" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            { name: "1. Música", minutes: 10, quote: "«Vengan ante su presencia con regocijo.» - Salmos 100:2", desc: "Deja que cada palabra te recuerde quién es Dios. Baja el ruido y enfoca tu corazón.", hasSpotify: true },
+            { name: "2. Journaling", minutes: 5, quote: "«Den gracias a Dios en toda situación.» - 1 Tes. 5:18", desc: "Escribe 10 cosas por las que estás agradecido. Esto aterriza y centra tu perspectiva.", hasSpotify: false },
+            { name: "3. Orar", minutes: 5, quote: "«El Espíritu nos ayuda en nuestra debilidad.» - Romanos 8:26", desc: "Háblale al Espíritu Santo. Pídele que te guíe y haz consciente Su presencia contigo.", hasSpotify: false },
+            { name: "4. Leer la Biblia", minutes: 15, quote: "«Tu palabra es una lámpara a mis pies.» - Salmos 119:105", desc: "Lee un capítulo completo, sin prisa. Si estás empezando, ve a los evangelios.", hasSpotify: false },
+            { name: "5. Resaltar", minutes: 10, quote: "«Medita en él de día y de noche.» - Josué 1:8", desc: "Elige el versículo que más te habló. Detente y escúchalo con intención.", hasSpotify: false },
+            { name: "6. Devocional", minutes: 10, quote: "«No se contenten sólo con escuchar la palabra.» - Santiago 1:22", desc: "Escribe sobre ese versículo. Bájalo a tu vida y hazlo práctico para que te transforme.", hasSpotify: false },
+            { name: "7. Agradecimiento", minutes: 5, quote: "«En toda ocasión... presenten sus peticiones a Dios y denle gracias.» - Filipenses 4:6", desc: "Termina dándole gracias por hablarte y formar esta disciplina en ti.", hasSpotify: false }
+        ];
+
+        let currentStepIndex = -1;
+        let timeLeft = 0;
+        let totalSeconds = 0;
+        let timerInterval = null;
+        let isRunning = false;
+
+        const circle = document.getElementById('progress-circle');
+        const circumference = 2 * Math.PI * 90;
+
+        function startApp() {
+            const url = document.getElementById('initial-spotify').value;
+            if(url) localStorage.setItem('spotifyPlaylist', url);
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+        }
+
+        function toggleWelcome() {
+            const welcome = document.getElementById('welcome-screen');
+            welcome.style.display = welcome.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function setProgress(percent) {
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        function formatSpotify(url) {
+            if (!url) return "https://open.spotify.com/embed/playlist/37i9dQZF1DWZqd5YICuC9p"; // Por defecto
+            return url.replace("spotify.com/", "spotify.com/embed/");
+        }
+
+        function loadStep(index) {
+            if (index >= steps.length) return finishApp();
+            const s = steps[index];
+            document.getElementById('step-name').textContent = s.name;
+            document.getElementById('step-quote').textContent = s.quote;
+            document.getElementById('step-desc').textContent = s.desc;
+            timeLeft = s.minutes * 60;
+            totalSeconds = timeLeft;
+            
+            const spContainer = document.getElementById('spotify-container');
+            if (s.hasSpotify) {
+                const savedUrl = localStorage.getItem('spotifyPlaylist');
+                document.getElementById('spotify-frame').src = formatSpotify(savedUrl);
+                spContainer.style.display = 'block';
+            } else {
+                spContainer.style.display = 'none';
+            }
+            document.getElementById('btn-next').style.display = 'block';
+            updateDisplay();
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('btn-primary');
+            if (isRunning) {
+                clearInterval(timerInterval);
+                btn.textContent = "Reanudar";
+            } else {
+                if (currentStepIndex === -1) { currentStepIndex = 0; loadStep(0); }
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        if(navigator.vibrate) navigator.vibrate(500);
+                        nextStep();
+                    }
+                }, 1000);
+                btn.textContent = "Pausar";
+            }
+            isRunning = !isRunning;
+        }
+
+        function nextStep() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            currentStepIndex++;
+            document.getElementById('btn-primary').textContent = "Iniciar Paso";
+            loadStep(currentStepIndex);
+        }
+
+        function updateDisplay() {
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('time-display').textContent = `${m}:${s}`;
+            setProgress((timeLeft / totalSeconds) * 100);
+        }
+
+        function finishApp() {
+            document.getElementById('step-name').textContent = "¡Amén!";
+            document.getElementById('step-desc').textContent = "Has completado tu hora. Ve en paz.";
+            document.getElementById('main-app').innerHTML = `<div style="padding:50px"><h1>¡Tiempo completado!</h1><p>Que la paz de Dios guarde tu corazón hoy.</p><button class="btn primary" onclick="location.reload()">Reiniciar</button></div>`;
+        }
+
+        window.onload = () => {
+            const saved = localStorage.getItem('spotifyPlaylist');
+            if(saved) document.getElementById('initial-spotify').value = saved;
+        }
+    </script>
+</body>
+</html>
