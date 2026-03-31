@@ -3,44 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Comunión - Preparación</title>
+    <title>Comunión - 60 Minutos</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #FAFAF9;
-            --surface-color: #FEF3C7;
-            --accent-color: #D97706;
-            --text-main: #292524;
-            --text-muted: #78716C;
-            --timer-bg: #FDE68A;
+            --bg-color: #FDFBF7; /* Blanco arena muy suave */
+            --surface-color: #FFFFFF;
+            --accent-color: #B4884B; /* Oro pálido/Bronce elegante */
+            --accent-light: #F3EAE0;
+            --text-main: #2D3748; /* Pizarra oscuro, más suave que el negro puro */
+            --text-muted: #718096;
+            --timer-bg: #EDF2F7;
         }
         
         * { box-sizing: border-box; }
         
         body {
-            background-color: var(--bg-color);
+            background-color: #1A202C; /* Fondo oscuro exterior para PWA instalada en tablet/PC */
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center; /* Centra la app si se abre en pantallas grandes */
-            background-color: #121212; /* Fondo oscuro por si lo abre en PC, para que resalte la app */
+            justify-content: center;
             height: 100vh;
-            overflow: hidden; /* Evita el scroll indeseado */
+            overflow: hidden;
         }
 
         /* Contenedor estricto de celular */
         .mobile-wrapper {
             background-color: var(--bg-color);
             width: 100%;
-            max-width: 430px; /* Ancho máximo de un iPhone Pro Max */
+            max-width: 430px;
             height: 100vh;
             position: relative;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
         }
 
         /* Pantalla de Bienvenida */
@@ -53,76 +57,149 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 25px;
-            text-align: center;
+            padding: 24px;
             animation: fadeIn 0.8s ease;
         }
 
         .welcome-card {
-            background: white;
-            padding: 35px 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.08);
+            background: var(--surface-color);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(180, 136, 75, 0.08);
             width: 100%;
-            border: 1px solid var(--surface-color);
+            text-align: center;
         }
 
-        .welcome-card h1 { font-size: 28px; margin-bottom: 15px; color: var(--accent-color); }
-        .prep-list { text-align: left; margin: 20px 0; padding: 0; list-style: none; }
-        .prep-list li { margin-bottom: 12px; display: flex; align-items: center; font-size: 16px; color: var(--text-main); }
-        .prep-list span { font-size: 22px; margin-right: 12px; }
+        .welcome-card h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 32px; 
+            margin-bottom: 10px; 
+            color: var(--text-main); 
+        }
 
-        .spotify-setup { margin-top: 20px; text-align: left; }
-        .spotify-setup label { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+        .prep-list { text-align: left; margin: 30px 0; padding: 0; list-style: none; }
+        .prep-list li { 
+            margin-bottom: 16px; 
+            display: flex; 
+            align-items: center; 
+            font-size: 15px; 
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        .prep-list span { 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            font-size: 16px; 
+            margin-right: 15px; 
+            color: var(--accent-color);
+        }
+
+        .spotify-setup { margin-top: 10px; text-align: left; }
+        .spotify-setup label { font-size: 13px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;}
         .spotify-setup input {
-            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #E7E5E4;
-            background: #FAFAF9; color: var(--text-main); margin-top: 8px; font-size: 14px;
+            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #E2E8F0;
+            background: #F8FAFC; color: var(--text-main); margin-top: 8px; font-size: 14px;
+            transition: border-color 0.3s;
         }
+        .spotify-setup input:focus { outline: none; border-color: var(--accent-color); }
 
-        /* Contenedor Principal (Oculto al inicio) */
+        /* App Principal */
         #main-app { 
             display: none; 
             width: 100%; 
             height: 100%;
-            padding: 20px; 
+            padding: 24px; 
             flex-direction: column; 
             align-items: center; 
         }
 
-        header { width: 100%; padding: 10px 0; display: flex; justify-content: flex-end; }
-        .icon-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; transition: 0.3s; }
-        
-        .container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; }
-        h1 { font-size: 26px; margin: 0 0 8px 0; }
-        .quote { font-size: 14px; color: var(--accent-color); font-style: italic; margin-bottom: 15px; font-weight: 500; }
-        .description { font-size: 15px; color: var(--text-muted); line-height: 1.5; margin-bottom: 25px; }
-
-        /* Temporizador Circular */
-        .timer-wrapper { position: relative; width: 200px; height: 200px; margin-bottom: 25px; }
-        .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .timer-bg { fill: none; stroke: var(--timer-bg); stroke-width: 6; }
-        .timer-progress { fill: none; stroke: var(--accent-color); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
-        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 46px; font-weight: 300; }
-
-        .controls { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; }
-        button.btn {
-            background-color: var(--surface-color); color: var(--accent-color); border: 1px solid var(--timer-bg);
-            padding: 15px; font-size: 16px; border-radius: 12px; cursor: pointer; font-weight: 600; width: 100%;
-            /* Quita el delay feo del touch en celulares */
-            touch-action: manipulation; 
+        header { 
+            width: 100%; 
+            padding: 10px 0 20px 0; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
         }
-        button.btn.primary { background-color: var(--accent-color); color: white; border: none; }
         
-        /* Botón Nativo de Spotify */
+        .step-indicator {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .icon-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.3s; padding: 10px;}
+        
+        .container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; width: 100%; padding-top: 10px; }
+        
+        .card-devocional {
+            background: var(--surface-color);
+            border-radius: 24px;
+            padding: 35px 25px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            margin-bottom: 30px;
+        }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 28px; margin: 0 0 16px 0; font-weight: 600;}
+        
+        .quote { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 17px; 
+            color: var(--accent-color); 
+            font-style: italic; 
+            margin-bottom: 20px; 
+            line-height: 1.4;
+        }
+        
+        .description { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin: 0; font-weight: 300; }
+
+        /* Temporizador Circular Elegante */
+        .timer-wrapper { position: relative; width: 180px; height: 180px; margin-bottom: 30px; }
+        .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .timer-bg { fill: none; stroke: var(--timer-bg); stroke-width: 3; }
+        .timer-progress { fill: none; stroke: var(--accent-color); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+        .timer-text { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            font-size: 42px; font-weight: 300; font-family: 'Inter', sans-serif;
+            color: var(--text-main); letter-spacing: -1px;
+        }
+
+        /* Controles */
+        .controls { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
+        
+        .btn {
+            background-color: var(--surface-color); color: var(--text-main); border: 1px solid #E2E8F0;
+            padding: 16px; font-size: 15px; border-radius: 14px; cursor: pointer; font-weight: 500; width: 100%;
+            touch-action: manipulation; transition: all 0.2s ease;
+            text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        
+        .btn.primary { 
+            background-color: var(--text-main); 
+            color: white; 
+            border: none; 
+            box-shadow: 0 10px 20px rgba(45, 55, 72, 0.15);
+        }
+        
+        .btn.primary:active { transform: scale(0.98); }
+        
+        /* Botón Spotify Nativo - Estilo Integrado */
         #spotify-native-btn {
             background-color: #1DB954;
             color: white;
             border: none;
             display: none;
-            margin-bottom: 15px;
+            font-weight: 600;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -130,33 +207,37 @@
 <div class="mobile-wrapper">
     <div id="welcome-screen">
         <div class="welcome-card">
-            <h1>Hola, Morro</h1>
-            <p style="color: var(--text-muted); font-size: 14px;">Asegúrate de tener todo listo para este tiempo.</p>
+            <h1>Hola,</h1>
+            <p style="color: var(--text-muted); font-size: 15px; line-height: 1.5; margin-bottom: 10px;">Prepara tu espacio y tu corazón para este tiempo de comunión con Dios en 60 min.</p>
             
             <ul class="prep-list">
-                <li><span>📖</span> Biblia física o digital</li>
-                <li><span>📒</span> Libreta devocional</li>
-                <li><span>✏️</span> Pluma para anotar</li>
+                <li><span>📖</span> Tu Biblia física o digital</li>
+                <li><span>📓</span> Libreta o diario devocional</li>
+                <li><span>✒️</span> Pluma para anotar Su palabra</li>
             </ul>
 
             <div class="spotify-setup">
-                <label>Pega el link de tu Playlist:</label>
-                <input type="text" id="initial-spotify" placeholder="https://open.spotify.com/playlist/...">
+                <label>Enlace de Spotify (Playlist):</label>
+                <input type="text" id="initial-spotify" placeholder="Pega el enlace aquí...">
             </div>
 
-            <button class="btn primary" style="margin-top: 25px;" onclick="startApp()">Empezar mi hora</button>
+            <button class="btn primary" style="margin-top: 30px;" onclick="startApp()">Comenzar Devocional</button>
         </div>
     </div>
 
     <div id="main-app">
         <header>
-            <button class="icon-btn" onclick="toggleWelcome()" title="Instrucciones">📔</button>
+            <span class="step-indicator" id="step-counter">PASO 1 DE 7</span>
+            <button class="icon-btn" onclick="toggleWelcome()" title="Ajustes">⚙️</button>
         </header>
 
         <div class="container">
-            <h1 id="step-name">Comunión</h1>
-            <div class="quote" id="step-quote">Santiago 4:8</div>
-            <div class="description" id="step-desc">Silencia el ruido del mundo.</div>
+            
+            <div class="card-devocional">
+                <h1 id="step-name">Comunión</h1>
+                <div class="quote" id="step-quote">«Acérquense a Dios, y él se acercará a ustedes.» - Santiago 4:8</div>
+                <div class="description" id="step-desc">Silencia el ruido del mundo. Toca iniciar cuando estés listo.</div>
+            </div>
 
             <div class="timer-wrapper">
                 <svg class="timer-svg" viewBox="0 0 200 200">
@@ -167,9 +248,12 @@
             </div>
 
             <div class="controls">
-                <button class="btn" id="spotify-native-btn" onclick="openSpotifyApp()">🎶 Abrir Playlist en Spotify</button>
+                <a class="btn" id="spotify-native-btn" href="#" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.659.301 1.02zm1.44-3.3c-.301.42-.84.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.84.241 1.2zM20.04 9.48c-3.96-2.34-10.44-2.58-14.22-1.44-.6.18-1.2-.12-1.38-.72-.18-.6.12-1.2.72-1.38 4.38-1.32 11.52-1.02 16.08 1.68.54.36.72 1.02.42 1.56-.3.48-.96.66-1.62.3z"/></svg>
+                    Abrir en Spotify
+                </a>
                 
-                <button class="btn primary" id="btn-primary" onclick="toggleTimer()">Iniciar</button>
+                <button class="btn primary" id="btn-primary" onclick="toggleTimer()">Iniciar Tiempo</button>
                 <button class="btn" id="btn-next" onclick="nextStep()" style="display: none;">Siguiente Paso ➔</button>
             </div>
         </div>
@@ -178,13 +262,13 @@
 
     <script>
         const steps = [
-            { name: "1. Música", minutes: 10, quote: "«Vengan ante su presencia con regocijo.» - Salmos 100:2", desc: "Abre Spotify, dale play a tu música y regresa aquí. Enfoca tu corazón.", hasSpotify: true },
-            { name: "2. Journaling", minutes: 5, quote: "«Den gracias a Dios en toda situación.» - 1 Tes. 5:18", desc: "Escribe 10 cosas por las que estás agradecido. Esto aterriza tu perspectiva.", hasSpotify: false },
-            { name: "3. Orar", minutes: 5, quote: "«El Espíritu nos ayuda en nuestra debilidad.» - Romanos 8:26", desc: "Háblale al Espíritu Santo. Haz consciente Su presencia contigo.", hasSpotify: false },
-            { name: "4. Leer la Biblia", minutes: 15, quote: "«Tu palabra es una lámpara a mis pies.» - Salmos 119:105", desc: "Lee un capítulo completo, sin prisa.", hasSpotify: false },
-            { name: "5. Resaltar", minutes: 10, quote: "«Medita en él de día y de noche.» - Josué 1:8", desc: "Elige el versículo que más te habló. Detente y escúchalo.", hasSpotify: false },
-            { name: "6. Devocional", minutes: 10, quote: "«No se contenten sólo con escuchar la palabra.» - Santiago 1:22", desc: "Escribe sobre ese versículo. Bájalo a tu vida.", hasSpotify: false },
-            { name: "7. Agradecimiento", minutes: 5, quote: "«Presenten sus peticiones a Dios y denle gracias.» - Filipenses 4:6", desc: "Termina dándole gracias por formar esta disciplina en ti.", hasSpotify: false }
+            { name: "Música", minutes: 10, quote: "«Vengan ante su presencia con regocijo.» - Salmos 100:2", desc: "Abre Spotify, dale play a tus alabanzas y regresa aquí. Deja que cada palabra te recuerde quién es Dios.", hasSpotify: true },
+            { name: "Journaling", minutes: 5, quote: "«Den gracias a Dios en toda situación.» - 1 Tes. 5:18", desc: "Escribe 10 cosas por las que estás agradecido. Esto aterriza, te centra y te hace ver a Dios en lo simple.", hasSpotify: false },
+            { name: "Orar", minutes: 5, quote: "«El Espíritu nos ayuda en nuestra debilidad.» - Romanos 8:26", desc: "Háblale al Espíritu Santo. Pídele que te guíe, que abra tus ojos espirituales.", hasSpotify: false },
+            { name: "Leer la Biblia", minutes: 15, quote: "«Tu palabra es una lámpara a mis pies.» - Salmos 119:105", desc: "Elige un libro y quédate ahí. Lee un capítulo completo, sin prisa.", hasSpotify: false },
+            { name: "Resaltar", minutes: 10, quote: "«Medita en él de día y de noche.» - Josué 1:8", desc: "Elige el versículo que más te habló. Ahí es donde Dios se vuelve personal. Escúchalo con intención.", hasSpotify: false },
+            { name: "Devocional", minutes: 10, quote: "«No se contenten sólo con escuchar la palabra.» - Santiago 1:22", desc: "Escribe sobre ese versículo. Bájalo a tu vida. Lo hago práctico. Esto es lo que realmente transforma.", hasSpotify: false },
+            { name: "Agradecimiento", minutes: 5, quote: "«Presenten sus peticiones a Dios y denle gracias.» - Filipenses 4:6", desc: "Termina dándole gracias por este tiempo, por hablarte y formar disciplina en ti.", hasSpotify: false }
         ];
 
         let currentStepIndex = -1;
@@ -199,6 +283,7 @@
         function startApp() {
             const url = document.getElementById('initial-spotify').value;
             if(url) localStorage.setItem('spotifyPlaylist', url);
+            
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
         }
@@ -213,28 +298,23 @@
             circle.style.strokeDashoffset = offset;
         }
 
-        function openSpotifyApp() {
-            let savedUrl = localStorage.getItem('spotifyPlaylist');
-            if (!savedUrl) {
-                alert("No guardaste ningún link, Morro. Abre Spotify manual.");
-                return;
-            }
-            // Abre el link nativo. El celular detectará que es de Spotify y abrirá la app real.
-            window.open(savedUrl, '_blank');
-        }
-
         function loadStep(index) {
             if (index >= steps.length) return finishApp();
             const s = steps[index];
+            
+            document.getElementById('step-counter').textContent = `PASO ${index + 1} DE 7`;
             document.getElementById('step-name').textContent = s.name;
             document.getElementById('step-quote').textContent = s.quote;
             document.getElementById('step-desc').textContent = s.desc;
+            
             timeLeft = s.minutes * 60;
             totalSeconds = timeLeft;
             
             const spBtn = document.getElementById('spotify-native-btn');
             if (s.hasSpotify) {
-                spBtn.style.display = 'block';
+                let savedUrl = localStorage.getItem('spotifyPlaylist') || '#';
+                spBtn.href = savedUrl; 
+                spBtn.style.display = 'flex';
             } else {
                 spBtn.style.display = 'none';
             }
@@ -247,7 +327,7 @@
             const btn = document.getElementById('btn-primary');
             if (isRunning) {
                 clearInterval(timerInterval);
-                btn.textContent = "Reanudar";
+                btn.textContent = "Reanudar Tiempo";
             } else {
                 if (currentStepIndex === -1) { currentStepIndex = 0; loadStep(0); }
                 timerInterval = setInterval(() => {
@@ -268,7 +348,7 @@
             clearInterval(timerInterval);
             isRunning = false;
             currentStepIndex++;
-            document.getElementById('btn-primary').textContent = "Iniciar Paso";
+            document.getElementById('btn-primary').textContent = "Iniciar Tiempo";
             loadStep(currentStepIndex);
         }
 
@@ -280,9 +360,20 @@
         }
 
         function finishApp() {
-            document.getElementById('step-name').textContent = "¡Amén!";
-            document.getElementById('step-desc').textContent = "Has completado tu hora. Ve en paz.";
-            document.getElementById('main-app').innerHTML = `<div style="padding:40px; text-align:center;"><h1>¡Tiempo completado!</h1><p style="color:var(--text-muted); margin-top:15px;">Que la paz de Dios guarde tu corazón hoy.</p><button class="btn primary" style="margin-top:30px;" onclick="location.reload()">Reiniciar</button></div>`;
+            document.getElementById('step-counter').textContent = "COMPLETADO";
+            document.getElementById('step-name').textContent = "Amén";
+            document.getElementById('step-quote').textContent = "«Bien, siervo bueno y fiel.» - Mateo 25:21";
+            document.getElementById('step-desc').textContent = "Has completado tu hora de comunión. Que esta paz te acompañe durante todo tu día.";
+            
+            document.getElementById('time-display').textContent = "00:00";
+            setProgress(0);
+            
+            document.getElementById('spotify-native-btn').style.display = 'none';
+            document.getElementById('btn-next').style.display = 'none';
+            
+            const primaryBtn = document.getElementById('btn-primary');
+            primaryBtn.textContent = "Finalizar y Cerrar";
+            primaryBtn.onclick = () => location.reload();
         }
 
         window.onload = () => {
